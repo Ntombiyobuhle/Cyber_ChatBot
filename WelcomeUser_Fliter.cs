@@ -68,7 +68,7 @@ namespace Cyber_ChatBot
                 asking_question = Console.ReadLine();
                 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine();
+                Console.Write(ChatBot_name);
                 ProcessQuestion(asking_question);
             }
             while (!asking_question.Equals("exit", StringComparison.OrdinalIgnoreCase));
@@ -135,9 +135,10 @@ namespace Cyber_ChatBot
                 }
             }
 
-            Console.Write(ChatBot_name);
+           
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(" PLEASE search something related to CYBER SECURITY.");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(ChatBot_name + "Please type your question or type 'Exit' to end the conversation.");
             Console.WriteLine();
            Console.ForegroundColor = ConsoleColor.White;
