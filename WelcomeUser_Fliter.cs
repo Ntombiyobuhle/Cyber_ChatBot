@@ -89,6 +89,7 @@ namespace Cyber_ChatBot
         {
             asking_question = asking_question.Trim().ToLower(); // Normalize input
 
+
             if (asking_question == "exit")
             {// Exit condition
                 Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -107,7 +108,7 @@ namespace Cyber_ChatBot
             ArrayList filteredWords = new ArrayList();// List to store filtered words
             foreach (string word in asking_question.Split(' '))// / Split the input into words
             {
-               if (!ignoreWords.Contains(word))
+                if (!ignoreWords.Contains(word.ToLower()))
                 {
                     filteredWords.Add(word);
                 }
@@ -120,14 +121,18 @@ namespace Cyber_ChatBot
                     // Check if the reply contains the filtered word
                     if (reply.ToLower().Contains(word))
                     {
-                        Console.Write(ChatBot_name );
+                     //   Console.Write(ChatBot_name );
                         Console.ForegroundColor = ConsoleColor.DarkBlue;
                         Console.WriteLine(reply);
                         Console.WriteLine();
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write(ChatBot_name);
                         Console.ForegroundColor = ConsoleColor.DarkBlue;
-                        Console.WriteLine("Please type your question or type 'Exit' to end the conversation");
+                        Console.Write("Please type your question or type");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(" 'Exit'");
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.Write(" to end the conversation");
                         Console.WriteLine();
                         Console.ForegroundColor = ConsoleColor.White;
                         return;
@@ -139,7 +144,12 @@ namespace Cyber_ChatBot
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(" PLEASE search something related to CYBER SECURITY.");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(ChatBot_name + "Please type your question or type 'Exit' to end the conversation.");
+            Console.Write(ChatBot_name+"Please type your question or type");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(" 'Exit'");
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.Write(" to end the conversation");
+            Console.WriteLine();
             Console.WriteLine();
            Console.ForegroundColor = ConsoleColor.White;
         }
@@ -181,11 +191,10 @@ namespace Cyber_ChatBot
 
         private void StoreIgnoreWords()
         {
-            string[] commonWords = { "what", "is", "how", "to", "about", "can", "the", "your", "i", "my", "me", "tell", "when","inform" +
-                    ""};
+            string[] commonWords = { "what", "is", "how", "to", "about", "can", "the", "your", "i", "my", "me", "tell", "when","inform" };
             foreach (string word in commonWords)
             {
-                ignoreWords.Add(word);
+                ignoreWords.Add(word.Trim().ToLower()); // make sure the words are lowercase
             }
         }
     }
