@@ -10,8 +10,8 @@ namespace Cyber_ChatBot
     {
         static void Main(string[] args)
         {
-            // class fot vioce greeting audio
-            new voice_greeting() { };
+        //    // class fot vioce greeting audio
+         new voice_greeting() { };
 
 
             // class for displaying image /logo
@@ -20,8 +20,7 @@ namespace Cyber_ChatBot
             // class for welcome user 
             new WelcomeUser_Fliter() { };
 
-            // filter class
-            new Filter() { };
+            
 
 
             

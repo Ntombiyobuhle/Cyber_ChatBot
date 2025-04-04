@@ -22,7 +22,7 @@ namespace Cyber_ChatBot
             Bitmap image = new Bitmap(full_path);
 
             // then set the size 
-            image = new Bitmap(image, new Size(40, 20));
+            image = new Bitmap(image, new Size(90, 50));
 
             // outer and inner loop
             for (int i = 0; i < image.Height; i++)
@@ -34,6 +34,7 @@ namespace Cyber_ChatBot
                     int gray = (int)(pixelColor.R + pixelColor.G  + pixelColor.B ) / 3;
                     char ascciiChar = gray > 200 ? ' ' : gray > 150 ? '@' : gray > 50 ? ' ' : gray > 25 ? '!' : '#';
                     Console.Write(ascciiChar);
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
                 Console.WriteLine();
             }

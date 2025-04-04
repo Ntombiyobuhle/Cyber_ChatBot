@@ -8,6 +8,7 @@ namespace Cyber_ChatBot
     {
         public voice_greeting()
         {
+            // get the current directory of the application
             string fill_loction = AppDomain.CurrentDomain.BaseDirectory;
 
             // replaace the bin\Debug\ with the name of the folder where the audio file is located
@@ -15,6 +16,7 @@ namespace Cyber_ChatBot
             //   Console.WriteLine( path);
             // TRY AND CATCH
             try
+            // play the audio file
             {
                 string full_path = Path.Combine(path, "voice greeting .wav");
                 // create instance of the sound player class
@@ -28,7 +30,7 @@ namespace Cyber_ChatBot
             {
 
                 Console.WriteLine(error.Message);
-            }// endof try and catch
+            }// end of try and catch
         }
     }
 }

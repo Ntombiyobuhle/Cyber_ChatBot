@@ -3,221 +3,189 @@ using System.Collections;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
+using System.Collections.Generic;
+
 
 namespace Cyber_ChatBot
 {
     public class WelcomeUser_Fliter
     {
+        private string username = string.Empty;
+        private string ChatBot_name = "CyberBuddy : ";
+        private string asking_question = string.Empty;
+        private ArrayList replies = new ArrayList();
+        private ArrayList ignoreWords = new ArrayList();
 
-        //declear variables 
-        private string username = string.Empty; // promtp user for name
-        private string ChatBot_name = "CyberBuddy : "; // chatbot name
-        private string asking_question = string.Empty; // promtp user for question
-        private ArrayList replies = new ArrayList(); // Store predefined replies
-        private ArrayList ignore = new ArrayList(); // Store ignored phrases
-
-
-        //constructor
         public WelcomeUser_Fliter()
         {
-            StoreReplies(); // Store replies
-            StoreIgnore(); // Store ignored phrases
-            // CyberBuddy welcome message
-            Console.WriteLine(ChatBot_name + "Welcome to CyberBuddy!");
-            Console.WriteLine(ChatBot_name + " What is you name");
+            StoreReplies();// Store the replies
+            StoreIgnoreWords();// Store the ignore words
 
-            // user input name and changing colour for user input
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.Write("you: ");
-            username = Console.ReadLine();
-
-
-            // resetting the colour
+            // Welcome message
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(ChatBot_name + "Hello " + username + "  i am here to help you with any queries you may have.");
-            Console.WriteLine(ChatBot_name + "Please type your question or type 'Exit' to end the conversation");
+            Console.WriteLine(ChatBot_name + "Welcome to CyberBuddy!");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(ChatBot_name + "What is your name?");
 
 
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.Write("You: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            username = Console.ReadLine();
+            Console.ForegroundColor = ConsoleColor.White;
+
+
+            // Input validation for username
+            while (!IsValidUsername(username))
+            {
+                Console.Write(ChatBot_name);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid username. Please enter a name with only letters.");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write("you: ");
+                username = Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+
+
+
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.WriteLine(ChatBot_name + "Hello " + username + ", I am here to help you with cybersecurity queries.");
+            Console.WriteLine(ChatBot_name + "Please type your question or type 'Exit' to end the conversation.");
 
             do
             {
-                // changing colour for user input
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.Write(username + ":");
+                Console.Write(username + ": ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 asking_question = Console.ReadLine();
-
-
-                // resetting the colour
+                
                 Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine();
+                ProcessQuestion(asking_question);
+            }
+            while (!asking_question.Equals("exit", StringComparison.OrdinalIgnoreCase));
 
-
-              
-                processing_question(asking_question);
-
-
-            } while (asking_question != "Exit");
-            Console.Write(ChatBot_name);
-            Console.WriteLine("Thank you " + username + " for using  CyberBuddy, hope we help you answer you queries");
+            Console.WriteLine(ChatBot_name + "Thank you " + username + " for using CyberBuddy. Hope we helped you answer your queries!");
             Environment.Exit(0);
 
-        }//end of constructor
+        } // End of constructor
 
 
-
-
-
-        // method to process the question
-        private void processing_question(string asking_question)
+        // Method to validate username
+        private bool IsValidUsername(string username)
         {
-            if (asking_question != "Exit")
+            return username.All(char.IsLetter);
+        }
+        // Method to process user input
+        private void ProcessQuestion(string asking_question)
+        {
+            asking_question = asking_question.Trim().ToLower(); // Normalize input
+
+            if (asking_question == "exit")
+            {// Exit condition
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=");
+                    Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(ChatBot_name);
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine( "Thank you " + username + " for using CyberBuddy. Hope we helped you answer your queries!");
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=");
+               Console.ForegroundColor = ConsoleColor.White;
+                Environment.Exit(0); // Exit program
+                
+            }
+            
+            ArrayList filteredWords = new ArrayList();// List to store filtered words
+            foreach (string word in asking_question.Split(' '))// / Split the input into words
             {
-                string[] words = asking_question.Split(' ');
-                ArrayList storingWords = new ArrayList();
-
-                // FOR  LOOPS 
-                foreach (string word in words)
+               if (!ignoreWords.Contains(word))
                 {
-                    if (!ignore.Contains(word))
-                    {
-                        storingWords.Add(word);
-                    }
-                }//end of for loop
-
-                Boolean found = false;
-                string message = string.Empty;
-
+                    filteredWords.Add(word);
+                }
+            }
+            // Check if any filtered words match the replies
+            foreach (string word in filteredWords)
+            {
                 foreach (string reply in replies)
                 {
-                    string[] replyWords = reply.Split(' ');
-
-                    foreach (string storedWord in storingWords)
+                    // Check if the reply contains the filtered word
+                    if (reply.ToLower().Contains(word))
                     {
-                        switch (storedWord.ToLower())
-                        {
-                            case "password":
-                                if (replyWords.Contains("password"))
-                                {
-                                    message = reply.ToString();
-                                    found = true;
-                                    break;
-                                }
-                                break;
-
-                            case "cyber":
-                                if (replyWords.Contains("cyber") && replyWords.Contains("security"))
-                                {
-                                    message = reply.ToString();
-                                    found = true;
-                                    break;
-                                }
-                                break;
-
-                               
-                        }
-
-                        if (found) break;
+                        Console.Write(ChatBot_name );
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine(reply);
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write(ChatBot_name);
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("Please type your question or type 'Exit' to end the conversation");
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.White;
+                        return;
                     }
-
-                    if (found) break;
-                }
-
-                if (found)
-                {
-                    Console.WriteLine(message);
-                }
-                else
-                {
-                    Console.Write(ChatBot_name);
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("PLEASE SEARCH SOMETHING RELATED TO CYBER SECURITY.");
-                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
-            else
-            {
-                Console.Write(ChatBot_name);
-                Console.WriteLine("Thank you " + username + " for using CyberBuddy, hope we help you answer you queries");
-                Environment.Exit(0);
-            }
+
+            Console.Write(ChatBot_name);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(" PLEASE search something related to CYBER SECURITY.");
+            Console.WriteLine(ChatBot_name + "Please type your question or type 'Exit' to end the conversation.");
+            Console.WriteLine();
+           Console.ForegroundColor = ConsoleColor.White;
         }
-
-
-
 
         private void StoreReplies()
         {
-            replies.Add(ChatBot_name + " Cbersecurity refers to the practices, technologies, and processes designed to protect digital information," +
-                 " networks, and computer systems from unauthorized access, use, disclosure, disruption, modification, or destruction." +
-                 " Cybersecurity is important because it helps protect sensitive information, prevents financial loss, and maintains the " +
-                 "confidentiality, integrity, and availability of data.");
-
-            replies.Add(ChatBot_name + " To protect yourself from cyber threats, use strong, unique passwords; enable two-factor authentication (2FA);" +
-                " keep your operating system, software, and apps up-to-date; use reputable antivirus software; avoid suspicious links" +
-                " and attachments; and use a virtual private network (VPN) when using public Wi-Fi.");
-
-
-            replies.Add(ChatBot_name + " To ensure secure online transactions, use HTTPS websites; verify the website's authenticity; use strong passwords" +
-                " and 2FA; keep your browser and software up-to-date; use a reputable payment gateway; and monitor your accounts for suspicious activity.");
-
-
-            replies.Add(ChatBot_name + " To create strong, unique passwords, use a combination of uppercase and lowercase letters, numbers, and special characters; avoid " +
-                "using easily guessable information (e.g., name, birthdate); and consider using a password manager to generate and store complex passwords.");
-
-
-            replies.Add(ChatBot_name + " Two-factor authentication (2FA) is a security process that requires a user to provide two different authentication factors to" +
-                " access a system, network, or application. 2FA typically combines something you know (e.g., password) with something you have (e.g., smartphone, token generator).");
-
-
-            replies.Add("To manage passwords securely, use a reputable password manager to generate, store, and retrieve complex passwords; enable 2FA whenever possible; and avoid " +
-                "using the same password across multiple sites.");
-
-
-            replies.Add("CyberBuddy " + "Using the same password across multiple sites increases the risk of a single data breach compromising multiple accounts. If a hacker gains access to one account," +
-                " they may be able to use the same password to access other accounts.");
-
-
-            replies.Add("CyberBuddy :" + "To secure your home, change the default administrator password; enable WPA2 encryption (or WPA3, if available); set up a guest network;" +
-                " keep your router's firmware up-to-date; and use a reputable antivirus program.");
-
-
-            replies.Add(ChatBot_name + "Passwords should be strong, unique, and complex, with a minimum of 12 characters, mixing uppercase and lowercase letters, numbers, and special characters." +
-                " Avoid using easily guessable information or common patterns. Use a password manager to generate and store unique passwords.");
-
-
-            replies.Add(ChatBot_name + "It is recommended that you update your password every 60-90 days. However, if you are utilizing a password manager and have a strong, distinctive password," +
-                " you may not need to update it as frequently. The key is to strike a balance between password security and the inconvenience of frequent password changes.\r\n");
-
-            replies.Add(ChatBot_name + "A password manager is a software application that securely stores and manages your passwords. It generates strong, unique passwords and autofills them for you," +
-                " eliminating the need to remember multiple passwords. This not only saves time but also enhances security by ensuring that each account has a distinct and robust password.\r\n\r\n");
-
-            replies.Add(ChatBot_name +  "No, it is not advisable to use the same password for multiple accounts. If one account is compromised, all accounts with the same password will be vulnerable." +
-                " This can lead to a domino effect, where a single password compromise can result in multiple accounts being hacked. Instead, use a password manager to generate and store unique passwords for each account.\r\n");
-
-            replies.Add(ChatBot_name+"A strong password is a combination of characters, numbers, and special characters that is at least 12 characters long. It should not contain easily guessable information such as names, birthdates, or common words.\r\n\r\n");
-
-            replies.Add(ChatBot_name+ "To maintain the security of your passwords, it is essential to utilize a password manager, enable two-factor authentication, use strong and unique passwords, and avoid sharing your passwords with others. Additionally, " +
-                "you should be cautious when using public computers or networks and avoid using the same password for multiple accounts.\r\n");
-            replies.Add(ChatBot_name + "If you forget your password, you can retrieve it by using the \"forgot password\" feature on the website or application. This will typically send a password reset link to your registered email address." +
-                " Alternatively, you can use a password manager to retrieve your password. It is essential to ensure that your password recovery options are secure and do not compromise your account security.\r\n");
-            replies.Add(ChatBot_name + "");
-            replies.Add(ChatBot_name + "");
-            replies.Add(ChatBot_name + "");
-            replies.Add(ChatBot_name + "");
-            replies.Add(ChatBot_name + "");
-            replies.Add(ChatBot_name + "");
-        
-    }//end of method
-
-        private void StoreIgnore()
-        {
-            // storing ignore in the array list
-            ignore.Add("what is");
-            ignore.Add("Tell me about");
-            ignore.Add("how to change my");
-            ignore.Add("How can I");
-            ignore.Add("How do I ");
-            ignore.Add("How can I ensure");
-            ignore.Add("Chabge");
+            replies.Add("Cybersecurity refers to protecting digital information and networks.");
+            replies.Add("Use strong passwords, enable 2FA, and keep your system updated.");
+            replies.Add("Use HTTPS, verify website authenticity, and enable 2FA for safe transactions.");
+            replies.Add("Passwords should be strong, unique, and stored securely.");
+            replies.Add("Two-factor authentication (2FA) adds an extra layer of security.");
+            replies.Add("Secure your home network by enabling WPA2/WPA3 and using strong passwords.");
+            replies.Add("SQL stands for Structured Query Language, used for managing databases.");
+            replies.Add("Phishing is a fraudulent attempt to obtain sensitive information.");
+            replies.Add("Cross-Site Scripting (XSS) allows attackers to inject malicious scripts.");
+            replies.Add("SQL Injection is inserting malicious SQL queries to manipulate databases.");
+            replies.Add("Cybersecurity refers to protecting digital information and networks from cyber threats.");
+            replies.Add("Cybersecurity is important because it helps prevent data breaches, identity theft, and financial fraud.");
+            replies.Add("To protect personal data online, use strong passwords, enable two-factor authentication, and avoid clicking on suspicious links.");
+            replies.Add("A strong password should be at least 12 characters long, include numbers, symbols, and a mix of uppercase and lowercase letters.");
+            replies.Add("To check if a website is secure, look for HTTPS in the URL and verify the site’s security certificate.");
+            replies.Add("Phishing is an attempt to trick users into providing sensitive information. Avoid clicking links in unexpected emails.");
+            replies.Add("Two-factor authentication (2FA) adds an extra layer of security by requiring a second form of verification.");
+            replies.Add("To secure your home Wi-Fi, change the default router password, enable WPA3 encryption, and disable remote access.");
+            replies.Add("A firewall is a security system that monitors and controls network traffic to block unauthorized access.");
+            replies.Add("Malware is malicious software like viruses and ransomware that can harm your computer or steal data.");
+            replies.Add("A denial-of-service (DoS) attack overwhelms a system with traffic to make it unavailable.");
+            replies.Add("Ransomware is a type of malware that locks files and demands payment to unlock them. Never pay the ransom.");
+            replies.Add("Social engineering attacks manipulate people into giving away confidential information.");
+            replies.Add("SQL Injection is a type of attack where hackers manipulate database queries to access or delete data.");
+            replies.Add("A VPN encrypts your internet traffic and hides your IP address to improve privacy and security online.");
+            replies.Add("To recognize a phishing email, check for grammatical errors, suspicious links, and unexpected requests for personal information.");
+            replies.Add("To secure cloud storage, use strong passwords, enable encryption, and avoid sharing sensitive files openly.");
+            replies.Add("The GDPR is a data protection law in the EU that ensures companies protect user data and privacy.");
+            replies.Add("Artificial Intelligence (AI) is used in cybersecurity for threat detection, anomaly detection, and automated security responses.");
+            replies.Add("The future of cybersecurity includes advancements in AI, quantum encryption, and more sophisticated cyber threats.");
+          
         }
-    } //end of class
-}// end of namespace
+
+        private void StoreIgnoreWords()
+        {
+            string[] commonWords = { "what", "is", "how", "to", "about", "can", "the", "your", "i", "my", "me", "tell", "when","inform" +
+                    ""};
+            foreach (string word in commonWords)
+            {
+                ignoreWords.Add(word);
+            }
+        }
+    }
+}
