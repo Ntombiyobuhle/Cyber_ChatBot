@@ -195,7 +195,7 @@ namespace Cyber_ChatBot
             conversationHistory.Add(ChatBot_name + randomReply);
             return true; // We've handled it
         }
-        // random..
+        // randomisation
         // Tries to match a keyword and give a related reply
         private bool TryKeywordReply(string question)
         {
