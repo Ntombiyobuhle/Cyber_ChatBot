@@ -55,7 +55,56 @@ Sihle:  how is sihle
 CyberBuddy :  PLEASE search something related to CYBER SECURITY.
 CyberBuddy : Please type your question or type 'Exit' to end the conversation
 
-Sihle: Exit
-CyberBuddy : =#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
-CyberBuddy : Thank you Sihle for using CyberBuddy. Hope we helped you answer your queries!
-=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
+
+#part 2 
+#Memory
+Remembers user's name across multiple questions.
+
+Can respond to "What is my name?" with personalized recall.
+it recalls all the covenversation you had with the chatbot.
+Example for memory
+CyberBuddy : What is your name?
+You: Alexis
+CyberBuddy : Hello Alexis, I am here to help you with cybersecurity queries.
+CyberBuddy : Please type your question or type 'Exit' to end the conversation.
+Alexis: Tell me about phishing
+CyberBuddy : Phishing is an attempt to trick users into providing sensitive information. Avoid clicking links in unexpected emails.
+sihle: what is phishing
+CyberBuddy : To recognize a phishing email, check for grammatical errors, suspicious links, and unexpected requests for personal information.
+sihle: tell me more about phishing
+CyberBuddy : Phishing is an attempt to trick users into providing sensitive information. Avoid clicking links in unexpected emails.
+sihle: what is my name
+CyberBuddy : Your name is sihle.
+sihle: remember
+CyberBuddy : Here is everything we've talked about:
+Alexis: tell me about phishing
+CyberBuddy : Phishing is an attempt to trick users into providing sensitive information. Avoid clicking links in unexpected emails.
+sihle: what is phishing
+CyberBuddy : To recognize a phishing email, check for grammatical errors, suspicious links, and unexpected requests for personal information.
+sihle: tell more about phishing
+CyberBuddy : Phishing is an attempt to trick users into providing sensitive information. Avoid clicking links in unexpected emails.
+sihle: what is my name
+CyberBuddy : Your name is sihle.
+
+
+# Sentimental Awareness
+Detects if the user expresses frustration or confusion.
+
+Responds with calming or reassuring messages if sentiment is negative.
+example
+
+sihle: im worried about my password
+CyberBuddy :  It's completely understandable to feel that way. Cybersecurity can be overwhelming, but I'm here to help.
+Use a password manager to store your credentials safely.
+
+# Response Randomization
+Answers are randomly selected from a pool of valid responses for each topic.
+Adds variety so the user doesn't get the same answer repeatedly.
+Example for randomisation 
+
+Sihle:  tell me about password
+CyberBuddy : Use a password manager to store your credentials safely.
+Sihle:  tell me more about password
+CyberBuddy : A strong password should be at least 12 characters long, include numbers, symbols, and a mix of uppercase and lowercase letters.
+
+
