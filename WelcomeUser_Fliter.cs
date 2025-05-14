@@ -425,7 +425,7 @@ namespace Cyber_ChatBot
             keyWords.Add("scam");
             keyWords.Add("privacy");
             keyWords.Add("ransomware");
-           // keyWords.Add("virus");
+
             keyWords.Add("firewall");
             keyWords.Add("Sql");
             keyWords.Add("phishing");
